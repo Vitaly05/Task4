@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Task4;
+using Task4.Middlewares;
 using Task4.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +26,8 @@ builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/login";
 });
+
+builder.Services.AddScoped<IAuthorizationMiddlewareResultHandler, LoginTimeAuthorizationMiddlewareResultHandler>();
 
 var app = builder.Build();
 
