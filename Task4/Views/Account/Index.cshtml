@@ -12,33 +12,35 @@
 </header>
 
 <div uk-height-viewport="expand: true" class="uk-flex uk-flex-center uk-margin-medium-top">
-    <form>
-        <table class="uk-table uk-table-divider uk-table-hover uk-table-middle">
-            <thead>
-                <tr>
-                    <th class="uk-table-shrink"></th>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Registration date</th>
-                    <th>Last login date</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (User user in ViewBag.Users)
-                {
+    <form class="uk-width-1-1 uk-width-max-content">
+        <div class="uk-overflow-auto">
+            <table class="uk-table uk-table-divider uk-table-hover uk-table-middle">
+                <thead>
                     <tr>
-                        <td><input type="checkbox" class="uk-checkbox" /></td>
-                        <td>@user.Id</td>
-                        <td>@user.Name</td>
-                        <td>@user.Email</td>
-                        <td>@user.RegisterDate</td>
-                        <td>@user.LastLogin</td>
-                        <td>@user.Status</td>
+                        <th class="uk-table-shrink"></th>
+                        <th class="uk-width-small">Id</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Registration date</th>
+                        <th>Last login date</th>
+                        <th>Status</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (User user in ViewBag.Users)
+                    {
+                        <tr>
+                            <td><input type="checkbox" class="uk-checkbox" /></td>
+                            <td class="uk-text-truncate" uk-tooltip="@user.Id">@user.Id</td>
+                            <td>@user.Name</td>
+                            <td>@user.Email</td>
+                            <td>@user.RegisterDate</td>
+                            <td>@user.LastLogin</td>
+                            <td>@user.Status</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </form>
 </div>
