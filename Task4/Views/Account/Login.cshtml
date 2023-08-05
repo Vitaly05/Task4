@@ -1,0 +1,38 @@
+﻿@model LoginModel
+
+@{
+    ViewData["Title"] = "Login page";
+}
+<div uk-height-viewport="expand: true" class="uk-flex uk-flex-column uk-flex-center">
+    <form class="uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-margin-small-left uk-margin-small-right"
+          method="post" action="/signIn">
+
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+
+        <div class="uk-flex uk-flex-column uk-width-large uk-margin">
+            <div class="uk-inline">
+                <span class="uk-form-icon" uk-icon="mail"></span>
+                <input class="uk-input uk-form-large" type="text" asp-for="Email" name="email" placeholder="Email">
+            </div>
+            <span asp-validation-for="Email"></span>
+        </div>
+
+        <div class="uk-flex uk-flex-column uk-width-large uk-margin-small">
+            <div class="uk-inline">
+                <span class="uk-form-icon" uk-icon="lock"></span>
+                <input class="uk-input uk-form-large" type="password" asp-for="Password" name="password" placeholder="Password">
+            </div>
+            <span asp-validation-for="Password"></span>
+        </div>
+
+        <div class="uk-margin-small uk-width-large">
+            <a href="/registration" class="uk-link-muted">Registration</a>
+            <div class="uk-inline uk-align-right uk-margin-remove">
+                <span class="uk-form-icon" uk-icon="sign-in"></span>
+                <input type="submit" class="uk-button uk-button-secondary" value="Sign in" />
+            </div>
+        </div>
+    </form>
+</div>
+
+@await Html.PartialAsync("_ValidationScriptsPartial");

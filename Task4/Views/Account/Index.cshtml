@@ -2,7 +2,10 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
+<form method="post" asp-controller="Account" asp-action="Logout">
+    <input type="submit" class="uk-button" value="Logout" />
+</form>
+<div class="uk-align-center">
     @foreach (User user in ViewBag.Users)
     {
         <p>@user.Name @user.Email @user.RegisterDate @user.Status @user.LastLogin</p>

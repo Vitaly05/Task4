@@ -1,0 +1,50 @@
+﻿@model RegistrationModel
+
+@{
+    ViewData["Title"] = "Registration";
+}
+<div uk-height-viewport="expand: true" class="uk-flex uk-flex-column uk-flex-center">
+    <form class="uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-margin-small-left uk-margin-small-right"
+          method="post" action="/singUp">
+
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+
+        <div class="uk-flex uk-flex-column uk-width-large uk-margin-small">
+            <div class="uk-inline">
+                <span class="uk-form-icon" uk-icon="user"></span>
+                <input type="text" class="uk-input" asp-for="Name" placeholder="Name" />
+            </div>
+            <span asp-validation-for="Name"></span>
+        </div>
+
+        <div class="uk-flex uk-flex-column uk-width-large uk-margin uk-margin-small-top">
+            <div class="uk-inline">
+                <span class="uk-form-icon" uk-icon="mail"></span>
+                <input type="text" class="uk-input" asp-for="Email" placeholder="Email" />
+            </div>
+            <span asp-validation-for="Email"></span>
+        </div>
+
+        <div class="uk-flex uk-flex-column uk-width-large uk-margin-small">
+            <div class="uk-inline">
+                <span class="uk-form-icon" uk-icon="lock"></span>
+                <input type="text" class="uk-input" asp-for="Password" placeholder="Password" />
+            </div>
+            <span asp-validation-for="Password"></span>
+        </div>
+
+        <div class="uk-flex uk-flex-column uk-width-large uk-margin-small">
+            <div class="uk-inline">
+                <span class="uk-form-icon" uk-icon="lock"></span>
+                <input type="text" class="uk-input" asp-for="ConfirmPassword" placeholder="Confirm password" />
+            </div>
+            <span asp-validation-for="ConfirmPassword"></span>
+        </div>
+
+        <div class="uk-width-large uk-margin uk-margin-remove-bottom">
+            <a href="/login" class="uk-link-muted">Sign in</a>
+            <input type="submit" class="uk-button uk-button-secondary uk-align-right" value="Sign up" />
+        </div>
+
+    </form>
+</div>
