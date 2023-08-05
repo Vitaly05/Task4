@@ -2,12 +2,43 @@
     ViewData["Title"] = "Home Page";
 }
 
-<form method="post" asp-controller="Account" asp-action="Logout">
-    <input type="submit" class="uk-button" value="Logout" />
-</form>
-<div class="uk-align-center">
-    @foreach (User user in ViewBag.Users)
-    {
-        <p>@user.Name @user.Email @user.RegisterDate @user.Status @user.LastLogin</p>
-    }
+<header class="uk-display-inline-block uk-width-1-1 uk-background-muted" uk-color="red">
+    <form method="post" action="/logout" class="">
+        <div class="uk-inline">
+            <span class="uk-form-icon" uk-icon="sign-out"></span>
+            <input type="submit" class="uk-button uk-button uk-button-large" value="Sign out" />
+        </div>
+    </form>
+</header>
+
+<div uk-height-viewport="expand: true" class="uk-flex uk-flex-center uk-margin-medium-top">
+    <form>
+        <table class="uk-table uk-table-divider uk-table-hover uk-table-middle">
+            <thead>
+                <tr>
+                    <th class="uk-table-shrink"></th>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Registration date</th>
+                    <th>Last login date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (User user in ViewBag.Users)
+                {
+                    <tr>
+                        <td><input type="checkbox" class="uk-checkbox" /></td>
+                        <td>@user.Id</td>
+                        <td>@user.Name</td>
+                        <td>@user.Email</td>
+                        <td>@user.RegisterDate</td>
+                        <td>@user.LastLogin</td>
+                        <td>@user.Status</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
 </div>
