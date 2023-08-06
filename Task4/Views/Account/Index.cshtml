@@ -2,13 +2,16 @@
     ViewData["Title"] = "Home Page";
 }
 
-<header class="uk-display-inline-block uk-width-1-1 uk-background-muted" uk-color="red">
-    <form method="post" action="/logout">
-        <div class="uk-inline">
-            <span class="uk-form-icon" uk-icon="sign-out"></span>
-            <input type="submit" class="uk-button uk-button uk-button-large" value="Sign out" />
-        </div>
-    </form>
+<header class="uk-width-1-1 uk-background-muted" uk-color="red">
+    <div class="uk-flex uk-flex-middle" id="account">
+        <form method="post" action="/logout">
+            <div class="uk-inline">
+                <span class="uk-form-icon" uk-icon="sign-out"></span>
+                <input type="submit" class="uk-button uk-button uk-button-large" value="Sign out" />
+            </div>
+        </form>
+        <div class="uk-margin-small-left">Hello, @ViewData["UserName"] (@ViewData["Email"])</div>
+    </div>
 </header>
 
 <div uk-height-viewport="expand: true" class="uk-flex uk-flex-center uk-margin-medium-top">

@@ -24,6 +24,9 @@ namespace Task4.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var currentUser = await userManager.GetUserAsync(HttpContext.User);
+            ViewData["UserName"] = currentUser.Name;
+            ViewData["Email"] = currentUser.Email;
             ViewBag.Users = await userManager.Users.ToListAsync();
             return View();
         }
