@@ -18,13 +18,14 @@ namespace Task4.Middlewares
 
         public async Task HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
         {
-            if (context.User.Identity.IsAuthenticated)
+            var user = await userManager.GetUserAsync(context.User);
+            if (user is null || user.Status == Data.AccountStatus.Blocked)
+                authorizeResult = PolicyAuthorizationResult.Challenge();
+            else
             {
-                var user = await userManager.GetUserAsync(context.User);
                 user.LastLogin = DateTime.Now;
                 await userManager.UpdateAsync(user);
             }
-
             await defaultHandler.HandleAsync(next, context, policy, authorizeResult);
         }
     }
