@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 using Task4.Data;
 using Task4.Models;
+using Task4.Repositories;
 
 namespace Task4.Controllers
 {
@@ -12,22 +13,20 @@ namespace Task4.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private readonly UserManager<User> userManager;
-        
+        private readonly IUsersRepository usersRepository;
+
         private readonly SignInManager<User> signInManager;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountController(IUsersRepository usersRepository, SignInManager<User> signInManager)
         {
-            this.userManager = userManager;
+            this.usersRepository = usersRepository;
             this.signInManager = signInManager;
         }
 
         public async Task<IActionResult> Index()
         {
-            var currentUser = await userManager.GetUserAsync(HttpContext.User);
-            ViewData["UserName"] = currentUser.Name;
-            ViewData["Email"] = currentUser.Email;
-            ViewBag.Users = await userManager.Users.ToListAsync();
+            var currentUser = await usersRepository.GetUserAsync(HttpContext.User);
+            await setIndexViewDataAsync(currentUser);
             return View();
         }
 
@@ -53,7 +52,7 @@ namespace Task4.Controllers
             if (ModelState.IsValid)
             {
                 var user = new User { Name = model.Name,Email = model.Email, UserName = model.Email, RegisterDate = DateTime.Now };
-                await registerUser(user, model.Password, onSuccess: () => result = Redirect("/"));
+                await registerUserAsync(user, model.Password, onSuccess: () => result = Redirect("/"));
             }
             return result;
         }
@@ -82,8 +81,8 @@ namespace Task4.Controllers
         public async Task<IActionResult> ChangeStatus([FromBody] List<string> usersIds, AccountStatus status)
         {
             if (usersIds.Count == 0) return BadRequest("Please, select at least one user.");
-            foreach (var user in getUsers(usersIds))
-                await changeStatus(user, status);
+            foreach (var user in usersRepository.GetUsers(usersIds))
+                await usersRepository.ChangeStatus(user, status);
             return Ok();
         }
 
@@ -91,14 +90,21 @@ namespace Task4.Controllers
         public async Task<IActionResult> DeleteUser([FromBody] List<string> usersIds)
         {
             if (usersIds.Count == 0) return BadRequest("Please, select at least one user.");
-            foreach (var user in getUsers(usersIds))
-                await userManager.DeleteAsync(user);
+            foreach (var user in usersRepository.GetUsers(usersIds))
+                await usersRepository.DeleteAsync(user);
             return Ok();
         }
 
-        private async Task registerUser(User user, string password, Action onSuccess)
+        private async Task setIndexViewDataAsync(User currentUser)
         {
-            var result = await userManager.CreateAsync(user, password);
+            ViewData["UserName"] = currentUser.Name;
+            ViewData["Email"] = currentUser.Email;
+            ViewBag.Users = await usersRepository.GetAllAsync();
+        }
+
+        private async Task registerUserAsync(User user, string password, Action onSuccess)
+        {
+            var result = await usersRepository.CreateAsync(user, password);
             if (result.Succeeded)
             {
                 await signInManager.SignInAsync(user, false);
@@ -111,20 +117,6 @@ namespace Task4.Controllers
         {
             foreach (var error in errors)
                     ModelState.AddModelError(String.Empty, Regex.Replace(error.Description, "Username", "Email"));
-        }
-
-        private IEnumerable<User> getUsers(List<string> usersIds)
-        {
-            if (usersIds is not null)
-                foreach (var id in usersIds)
-                    yield return userManager.Users.FirstOrDefault(u => u.Id == id);
-        }
-
-        private async Task changeStatus(User user, AccountStatus status)
-        {
-            if (user is null) return;
-            user.Status = status;
-            await userManager.UpdateAsync(user);
         }
     }
 }
