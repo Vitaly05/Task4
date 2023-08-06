@@ -8,12 +8,17 @@ $('#select-all-js').change(function () {
 $('#block-button-js').click(async e => { 
     e.preventDefault();
     await changeStatus(ACCOUNT_STATE_BLOCKED)
-});
+})
 
 $('#unblock-button-js').click(async e => { 
     e.preventDefault();
     await changeStatus(ACCOUNT_STATE_ACTIVE)
-});
+})
+
+$('#delete-button-js').click(async e => {
+    e.preventDefault();
+    await sendUsers('/delete')
+})
 
 async function changeStatus(status) {
     await sendUsers(`/changeStatus/${status}`)

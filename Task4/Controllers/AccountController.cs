@@ -80,6 +80,15 @@ namespace Task4.Controllers
             return Ok();
         }
 
+        [HttpPost("delete")]
+        public async Task<IActionResult> DeleteUser([FromBody] List<string> usersIds)
+        {
+            if (usersIds.Count == 0) return BadRequest("Please, select at least one user.");
+            foreach (var user in getUsers(usersIds))
+                await userManager.DeleteAsync(user);
+            return Ok();
+        }
+
         private async Task registerUser(User user, string password, Action onSuccess)
         {
             var result = await userManager.CreateAsync(user, password);
