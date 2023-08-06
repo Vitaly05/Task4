@@ -9,6 +9,7 @@ using Task4.Models;
 namespace Task4.Controllers
 {
     [Route("")]
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly UserManager<User> userManager;
@@ -21,25 +22,27 @@ namespace Task4.Controllers
             this.signInManager = signInManager;
         }
 
-        [Authorize]
         public async Task<IActionResult> Index()
         {
             ViewBag.Users = await userManager.Users.ToListAsync();
             return View();
         }
 
+        [AllowAnonymous]
         [HttpGet("login")]
         public IActionResult Login()
         {
             return View();
         }
 
+        [AllowAnonymous]
         [HttpGet("registration")]
         public IActionResult Registration()
         {
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost("singUp")]
         public async Task<IActionResult> SignUp(RegistrationModel model)
         {
@@ -52,6 +55,7 @@ namespace Task4.Controllers
             return result;
         }
 
+        [AllowAnonymous]
         [HttpPost("signIn")]
         public async Task<IActionResult> SignIn(LoginModel model, string ReturnUrl)
         {
