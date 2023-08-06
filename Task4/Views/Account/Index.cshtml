@@ -3,7 +3,7 @@
 }
 
 <header class="uk-display-inline-block uk-width-1-1 uk-background-muted" uk-color="red">
-    <form method="post" action="/logout" class="">
+    <form method="post" action="/logout">
         <div class="uk-inline">
             <span class="uk-form-icon" uk-icon="sign-out"></span>
             <input type="submit" class="uk-button uk-button uk-button-large" value="Sign out" />
@@ -12,12 +12,19 @@
 </header>
 
 <div uk-height-viewport="expand: true" class="uk-flex uk-flex-center uk-margin-medium-top">
-    <form class="uk-width-1-1 uk-width-max-content">
+    <form class="uk-width-1-1 uk-width-max-content" id="users-form-js">
+        <div class="toolbar uk-background-muted uk-padding-small">
+            <div>
+                <button class="uk-button uk-button-danger" id="block-button-js">Block</button>
+                <a href="" id="unblock-button-js" uk-icon="unlock"></a>
+                <a href="" id="delete-button-js" uk-icon="trash"></a>
+            </div>
+        </div>
         <div class="uk-overflow-auto">
             <table class="uk-table uk-table-divider uk-table-hover uk-table-middle">
                 <thead>
                     <tr>
-                        <th class="uk-table-shrink"></th>
+                        <th class="uk-table-shrink"><input type="checkbox" class="uk-checkbox" id="select-all-js" /></th>
                         <th class="uk-width-small">Id</th>
                         <th>Name</th>
                         <th>Email</th>
@@ -30,7 +37,7 @@
                     @foreach (User user in ViewBag.Users)
                     {
                         <tr>
-                            <td><input type="checkbox" class="uk-checkbox" /></td>
+                            <td><input type="checkbox" class="select-user-js uk-checkbox" name="usersIds" value="@user.Id" /></td>
                             <td class="uk-text-truncate" uk-tooltip="@user.Id">@user.Id</td>
                             <td>@user.Name</td>
                             <td>@user.Email</td>
@@ -44,3 +51,8 @@
         </div>
     </form>
 </div>
+
+@section Scripts
+{
+    <script src="~/js/index.js"></script>
+}

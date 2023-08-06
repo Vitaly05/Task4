@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
+using Task4.Data;
 using Task4.Models;
 
 namespace Task4.Controllers
@@ -70,6 +71,15 @@ namespace Task4.Controllers
             return Redirect("/");
         }
 
+        [HttpPost("changeStatus/{status}")]
+        public async Task<IActionResult> ChangeStatus([FromBody] List<string> usersIds, AccountStatus status)
+        {
+            if (usersIds.Count == 0) return BadRequest("Please, select at least one user.");
+            foreach (var user in getUsers(usersIds))
+                await changeStatus(user, status);
+            return Ok();
+        }
+
         private async Task registerUser(User user, string password, Action onSuccess)
         {
             var result = await userManager.CreateAsync(user, password);
@@ -85,6 +95,20 @@ namespace Task4.Controllers
         {
             foreach (var error in errors)
                     ModelState.AddModelError(String.Empty, Regex.Replace(error.Description, "Username", "Email"));
+        }
+
+        private IEnumerable<User> getUsers(List<string> usersIds)
+        {
+            if (usersIds is not null)
+                foreach (var id in usersIds)
+                    yield return userManager.Users.FirstOrDefault(u => u.Id == id);
+        }
+
+        private async Task changeStatus(User user, AccountStatus status)
+        {
+            if (user is null) return;
+            user.Status = status;
+            await userManager.UpdateAsync(user);
         }
     }
 }
