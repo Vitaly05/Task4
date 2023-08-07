@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Primitives;
 using System.Text.RegularExpressions;
 using Task4.Data;
 using Task4.Models;
@@ -64,8 +65,8 @@ namespace Task4.Controllers
             if (ModelState.IsValid)
             {
                 var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, true, false);
-                if (result.Succeeded) return Redirect(ReturnUrl ?? "/");
-                else ModelState.AddModelError(string.Empty, "Incorrect email or password");
+                if (await signInResultSucceeded(result, model))
+                    return Redirect(ReturnUrl ?? "/");
             }
             return View("Login", model);
         }
@@ -111,6 +112,18 @@ namespace Task4.Controllers
                 onSuccess.Invoke();
             }
             else addModelErrors(result.Errors);
+        }
+
+        private async Task<bool> signInResultSucceeded(Microsoft.AspNetCore.Identity.SignInResult result, LoginModel model)
+        {
+            if (result.Succeeded)
+            {
+                if (await usersRepository.GetStatusAsync(model.Email) == AccountStatus.Blocked)
+                    ModelState.AddModelError(string.Empty, $"Account '{model.Email}' is blocked.");
+                else return true;
+            }
+            else ModelState.AddModelError(string.Empty, "Incorrect email or password");
+            return false;
         }
 
         private void addModelErrors(IEnumerable<IdentityError> errors)

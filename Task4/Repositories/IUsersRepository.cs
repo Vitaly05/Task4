@@ -17,6 +17,8 @@ namespace Task4.Repositories
 
         Task<IdentityResult> DeleteAsync(User user);
 
+        Task<AccountStatus> GetStatusAsync(string email);
+
         Task ChangeStatus(User user, AccountStatus status);
     }
 }

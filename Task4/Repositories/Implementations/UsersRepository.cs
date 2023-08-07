@@ -30,6 +30,8 @@ namespace Task4.Repositories.Implementations
                     yield return userManager.Users.FirstOrDefault(u => u.Id == id);
         }
 
+        public async Task<AccountStatus> GetStatusAsync(string email) => (await userManager.FindByEmailAsync(email)).Status;
+
         public async Task ChangeStatus(User user, AccountStatus status)
         {
             if (user is null) return;
